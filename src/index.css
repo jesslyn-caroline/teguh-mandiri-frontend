@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Manrope', sans-serif;
+  @apply flex justify-center;
+}
