@@ -21,6 +21,25 @@ async function getAllItems():
     return { isError, message, data }
 }
 
+async function getItemById(id: string):
+    Promise<{ isError:boolean, message:string, data:ItemType }> {
+    
+    let data: ItemType = {} as ItemType
+    let message: string = ''
+    let isError: boolean = false
+
+    try {
+        const response = await axios.get(`${api}/items/${id}`)
+        data = response.data.data
+        message = response.data.message
+    } catch (error: any) {
+        isError = true
+        message = error.response.data.message
+    }
+
+    return { isError, message, data }
+}
+
 async function addNewItem(item:ItemType):
     Promise<{ message:string, isError:boolean }> {
 
@@ -29,6 +48,23 @@ async function addNewItem(item:ItemType):
 
     try {
         const response = await axios.post(`${api}/items`, item)
+        message = response.data.message
+    } catch (error: any) {
+        isError = true
+        message = error.response.data.message
+    }
+
+    return { message, isError }
+}
+
+async function updateItemById(item:ItemType):
+    Promise<{ message:string, isError:boolean }> {
+
+    let message: string = ''
+    let isError: boolean = false
+
+    try {
+        const response = await axios.put(`${api}/items/${item.id}`, item)
         message = response.data.message
     } catch (error: any) {
         isError = true
@@ -55,4 +91,4 @@ async function deleteItemById(id:string):
     return { isError, message }
 }
 
-export { getAllItems, addNewItem, deleteItemById }
+export { getAllItems, getItemById, addNewItem, updateItemById, deleteItemById }
