@@ -8,8 +8,16 @@ function useItems() {
     const navigate = useNavigate()
 
     const [items, setItems] = useState<ItemType[]>([])
+
+    const [search, setSearch] = useState<string>('')
+    const [filteredItems, setFilteredItems] = useState<ItemType[]>([])
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
+
+    const onSearchChange = (e:any) => {
+        setSearch(e.target.value)
+        setFilteredItems(items.filter((item) => item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.id.toLowerCase().includes(e.target.value.toLowerCase())))
+    }
 
     const [item, setItem] = useState<ItemType>({ id: '', name: '', stock: 0 })
     const onItemIdChange = (e:any) => setItem({ ...item, id: e.target.value })
@@ -20,7 +28,10 @@ function useItems() {
         const response = await getAllItems()
         
         if (response.isError) showToastError(response.message)
-        else setItems(response.data)
+        else {
+            setItems(response.data)
+            setFilteredItems(response.data)
+        }
     }
 
     async function getItem(id:string) {
@@ -66,7 +77,7 @@ function useItems() {
     }
 
     function sortBy(type:string) {
-        let tmp = items
+        let tmp = filteredItems
 
         switch (type) {
             case 'id': 
@@ -89,10 +100,14 @@ function useItems() {
                 break
         }
 
-        setItems(tmp)
+        setFilteredItems(tmp)
     }
 
-    return { items, onItemIdChange, onItemNameChange, onItemStockChange, getItems, getItem, addItem, editItem, deleteItem, sortBy, isAscending, sortType, item }
+    return { 
+        filteredItems, search, isAscending, sortType, item,
+        onItemIdChange, onItemNameChange, onItemStockChange,  onSearchChange, 
+        getItems, getItem, addItem, editItem, deleteItem, sortBy 
+    }
 }
 
 export default useItems
