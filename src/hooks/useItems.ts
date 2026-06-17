@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ItemType } from "../types/ItemType";
-import { addNewItem, deleteItemById, getAllItems } from "../apis/items";
+import { addNewItem, deleteItemById, getAllItems, getItemById, updateItemById } from "../apis/items";
 import { showToastError, showToastSuccess } from "../components/toasts/Toast";
 import { useNavigate } from "react-router";
 
@@ -11,16 +11,9 @@ function useItems() {
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
 
-    async function getItems() {
-        const response = await getAllItems()
-        
-        if (response.isError) showToastError(response.message)
-        else setItems(response.data)
-    }
+    const [item, setItem] = useState<ItemType | undefined>()
 
-    async function addItem(e:any) {
-        e.preventDefault()
-
+    function getFormData(e:any):ItemType {
         const formData = new FormData(e.target)
         const itemData:ItemType = {
             id: formData.get('id') as string,
@@ -28,12 +21,46 @@ function useItems() {
             stock: Number(formData.get('stock')),
         }
 
-        let response = await addNewItem(itemData)
+        return itemData
+    }
+
+    async function getItems() {
+        const response = await getAllItems()
+        
+        if (response.isError) showToastError(response.message)
+        else setItems(response.data)
+    }
+
+    async function getItem(id:string) {
+        const response = await getItemById(id)
+        
+        if (response.isError) showToastError(response.message)
+        else setItem(response.data)
+    }
+
+    async function addItem(e:any) {
+        e.preventDefault()
+
+        const item = getFormData(e)
+        let response = await addNewItem(item)
 
         if (response.isError) showToastError(response.message)
         else {
             showToastSuccess(response.message)
             e.target.reset()
+            navigate('/barang')
+        }
+    }
+
+    async function editItem(e:any) {
+        e.preventDefault()
+
+        const item = getFormData(e)
+        const response = await updateItemById(item)
+        
+        if (response.isError) showToastError(response.message)
+        else {
+            showToastSuccess(response.message)
             navigate('/barang')
         }
     }
@@ -75,7 +102,7 @@ function useItems() {
         setItems(tmp)
     }
 
-    return { items, getItems, addItem, deleteItem, sortBy, isAscending, sortType }
+    return { items, getItems, getItem, addItem, editItem, deleteItem, sortBy, isAscending, sortType, item }
 }
 
 export default useItems
