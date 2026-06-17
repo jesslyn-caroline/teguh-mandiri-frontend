@@ -3,6 +3,7 @@ import IndexLayout from "./layouts/IndexLayout"
 import ItemList from "./pages/ItemList"
 import ItemAdd from "./pages/ItemAdd"
 import { _ToastContainer } from "./components/toasts/Toast"
+import ItemUpdate from "./pages/ItemUpdate"
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         <Route path='/purchase-order' element={<h1>Purchase Order</h1>} />
         <Route path='/history-barang' element={<h1>History Barang</h1>} />
       </Route>
-      <Route path='/barang/tambah' element={<ItemAdd />}  key='tambah'/>
+      <Route path='/barang/tambah' element={<ItemAdd />}/>
+      <Route path='/barang/edit/:id' element={<ItemUpdate />}/>
     </Routes>
     <_ToastContainer />
   </>
