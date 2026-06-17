@@ -4,7 +4,7 @@ import TextButton from "../../components/buttons/TextButton"
 import useItems from "../../hooks/useItems"
 
 function ItemAdd() {
-    const { addItem } = useItems()
+    const { onItemIdChange, onItemNameChange, onItemStockChange, addItem } = useItems()
 
     return (
     <div className={`max-w-480 w-screen min-h-screen h-full flex flex-col gap-y-4 px-16 py-10`}>
@@ -16,11 +16,11 @@ function ItemAdd() {
             <h1 className={`text-lg font-bold`}>Tambah Barang Baru</h1>
             <div className={`grid grid-cols-[320px_1fr] gap-x-4`}>
                 <div className={`flex flex-col gap-y-4`}>
-                    <TextField title='Kode Barang' type='text' id='id'/>
-                    <TextField title='Stok' type='number' id='stock'/>
+                    <TextField title='Kode Barang' type='text' id='id' onChange={onItemIdChange}/>
+                    <TextField title='Stok' type='number' id='stock' onChange={onItemStockChange}/>
                 </div>
                 <div>
-                    <TextField title='Nama Barang' type='text' id='name'/>
+                    <TextField title='Nama Barang' type='text' id='name' onChange={onItemNameChange}/>
                 </div>
             </div>
             <div className={`h-full flex justify-end items-end`}>

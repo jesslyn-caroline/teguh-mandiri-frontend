@@ -11,19 +11,11 @@ function useItems() {
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
 
-    const [item, setItem] = useState<ItemType | undefined>()
-
-    function getFormData(e:any):ItemType {
-        const formData = new FormData(e.target)
-        const itemData:ItemType = {
-            id: formData.get('id') as string,
-            name: formData.get('name') as string,
-            stock: Number(formData.get('stock')),
-        }
-
-        return itemData
-    }
-
+    const [item, setItem] = useState<ItemType>({ id: '', name: '', stock: 0 })
+    const onItemIdChange = (e:any) => setItem({ ...item, id: e.target.value })
+    const onItemNameChange = (e:any) => setItem({ ...item, name: e.target.value })
+    const onItemStockChange = (e:any) => setItem({ ...item, stock: e.target.value })
+    
     async function getItems() {
         const response = await getAllItems()
         
@@ -41,7 +33,6 @@ function useItems() {
     async function addItem(e:any) {
         e.preventDefault()
 
-        const item = getFormData(e)
         let response = await addNewItem(item)
 
         if (response.isError) showToastError(response.message)
@@ -55,7 +46,6 @@ function useItems() {
     async function editItem(e:any) {
         e.preventDefault()
 
-        const item = getFormData(e)
         const response = await updateItemById(item)
         
         if (response.isError) showToastError(response.message)
@@ -102,7 +92,7 @@ function useItems() {
         setItems(tmp)
     }
 
-    return { items, getItems, getItem, addItem, editItem, deleteItem, sortBy, isAscending, sortType, item }
+    return { items, onItemIdChange, onItemNameChange, onItemStockChange, getItems, getItem, addItem, editItem, deleteItem, sortBy, isAscending, sortType, item }
 }
 
 export default useItems

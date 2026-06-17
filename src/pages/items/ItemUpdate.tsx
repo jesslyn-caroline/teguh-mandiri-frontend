@@ -6,7 +6,7 @@ import { useParams } from "react-router"
 import { useEffect } from "react"
 
 function ItemUpdate() {
-    const { editItem, getItem, item } = useItems()
+    const { item, onItemIdChange, onItemNameChange, onItemStockChange, editItem, getItem } = useItems()
     const { id } = useParams()
 
     useEffect(() => {
@@ -23,11 +23,11 @@ function ItemUpdate() {
             <h1 className={`text-lg font-bold`}>Edit Barang { item.id }</h1>
             <div className={`grid grid-cols-[320px_1fr] gap-x-4`}>
                 <div className={`flex flex-col gap-y-4`}>
-                    <TextField title='Kode Barang' type='text' id='id' value={item.id} />
-                    <TextField title='Stok' type='number' id='stock' value={item.stock} />
+                    <TextField title='Kode Barang' type='text' id='id' value={ item.id } onChange={onItemIdChange} />
+                    <TextField title='Stok' type='number' id='stock' value={ item.stock } onChange={onItemStockChange} />
                 </div>
                 <div>
-                    <TextField title='Nama Barang' type='text' id='name' value={item.name}/>
+                    <TextField title='Nama Barang' type='text' id='name' value={ item.name } onChange={onItemNameChange}/>
                 </div>
             </div>
             <div className={`h-full flex justify-end items-end`}>
