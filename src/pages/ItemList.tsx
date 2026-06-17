@@ -1,10 +1,12 @@
 import { useEffect } from "react"
 import { RiAddLine, RiArrowDropDownFill } from "@remixicon/react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import useItems from "../hooks/useItems"
 import IconButton from "../components/buttons/IconButton"
 
 function ItemList() {
+    const navigate = useNavigate()
+
     const { items, getItems, deleteItem, sortBy, isAscending, sortType } = useItems()
 
     useEffect(() => {
@@ -45,7 +47,7 @@ function ItemList() {
                             <td className={`px-6 py-4 text-gray-600 font-medium`}>{ item.name }</td>
                             <td className={`px-6 py-4 text-gray-600 font-medium`}>{ item.stock }</td>
                             <td className={`px-6 py-4 flex flex-row gap-x-2 justify-center`}>
-                                <IconButton type='edit' title='Edit' onClick={() => {}}/>
+                                <IconButton type='edit' title='Edit' onClick={() => { navigate(`/barang/edit/${item.id}`) }}/>
                                 <IconButton type='delete' title='Hapus' onClick={() => deleteItem(item.id)}/>
                             </td>
                         </tr>
