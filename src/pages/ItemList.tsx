@@ -35,7 +35,7 @@ function ItemList() {
                                 <RiArrowDropDownFill className={`absolute right-2 top-1/2 -translate-y-1/2 size-6 text-gray-500 ${isAscending ? 'rotate-180' : 'rotate-0'}`}/> }
                             </th>
                         )})}
-                        <th className={`px-6 py-3 font-bold text-gray-600 uppercase text-xs`}>Aksi</th>
+                        <th className={`px-6 py-3 font-bold text-gray-600 uppercase text-xs text-center`}>Aksi</th>
                     </tr>
                 </thead>
                 <tbody className={`text-sm`}>
@@ -44,7 +44,8 @@ function ItemList() {
                             <th className={`px-6 py-4 font-semibold`}>{ item.id }</th>
                             <td className={`px-6 py-4 text-gray-600 font-medium`}>{ item.name }</td>
                             <td className={`px-6 py-4 text-gray-600 font-medium`}>{ item.stock }</td>
-                            <td className={`px-6 py-4`}>
+                            <td className={`px-6 py-4 flex flex-row gap-x-2 justify-center`}>
+                                <IconButton type='edit' title='Edit' onClick={() => {}}/>
                                 <IconButton type='delete' title='Hapus' onClick={() => deleteItem(item.id)}/>
                             </td>
                         </tr>
