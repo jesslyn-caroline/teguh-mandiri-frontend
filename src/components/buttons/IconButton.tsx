@@ -7,8 +7,14 @@ interface Props {
 }
 
 const variants: any = {
-    edit: <RiEdit2Line className={`text-white size-5`}/>,
-    delete: <RiDeleteBinLine className={`text-white size-5`}/>,
+    edit: {
+        icon: <RiEdit2Line className={`text-white size-5`}/>,
+        color: 'bg-yellow-400'
+    },
+    delete: {
+        icon: <RiDeleteBinLine className={`text-white size-5`}/>,
+        color: 'bg-red-500'
+    },
 }
 
 function IconButton({ type, title, onClick }: Props) {
@@ -16,9 +22,9 @@ function IconButton({ type, title, onClick }: Props) {
     <button 
         onClick={onClick} 
         title={title} 
-        className={`p-1 bg-red-500 rounded-md cursor-pointer`}
+        className={`p-1 ${variants[type].color} rounded-md cursor-pointer`}
     >
-        { variants[type] }
+        { variants[type].icon }
     </button>
 )}
 
