@@ -2,7 +2,6 @@ import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function _ToastContainer() {
-    console.log("ToastContainer rendered");
     return <ToastContainer
         position="bottom-left"
         autoClose={5000}
@@ -19,7 +18,6 @@ function _ToastContainer() {
 }
 
 function showToastSuccess(message:string) {
-    console.log("SUCCESS TOAST:", message);
     toast.success(message, {
         position: "bottom-left",
         autoClose: 5000,
