@@ -2,8 +2,11 @@ import { useState } from "react";
 import type { ItemType } from "../types/ItemType";
 import { addNewItem, deleteItemById, getAllItems } from "../apis/items";
 import { showToastError, showToastSuccess } from "../components/toasts/Toast";
+import { useNavigate } from "react-router";
 
 function useItems() {
+    const navigate = useNavigate()
+
     const [items, setItems] = useState<ItemType[]>([])
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
@@ -17,7 +20,7 @@ function useItems() {
 
     async function addItem(e:any) {
         e.preventDefault()
-        
+
         const formData = new FormData(e.target)
         const itemData:ItemType = {
             id: formData.get('id') as string,
@@ -31,7 +34,7 @@ function useItems() {
         else {
             showToastSuccess(response.message)
             e.target.reset()
-            window.location.href = '/barang'
+            navigate('/barang')
         }
     }
 
