@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router"
 import IndexLayout from "./layouts/IndexLayout"
-import ItemList from "./pages/ItemList"
-import ItemAdd from "./pages/ItemAdd"
+import ItemList from "./pages/items/ItemList"
+import ItemAdd from "./pages/items/ItemAdd"
 import { _ToastContainer } from "./components/toasts/Toast"
-import ItemUpdate from "./pages/ItemUpdate"
+import ItemUpdate from "./pages/items/ItemUpdate"
 
 function App() {
   return (

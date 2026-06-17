@@ -1,7 +1,7 @@
-import TextField from "../components/fields/TextField"
-import BackButton from "../components/buttons/BackButton"
-import TextButton from "../components/buttons/TextButton"
-import useItems from "../hooks/useItems"
+import TextField from "../../components/fields/TextField"
+import BackButton from "../../components/buttons/BackButton"
+import TextButton from "../../components/buttons/TextButton"
+import useItems from "../../hooks/useItems"
 import { useParams } from "react-router"
 import { useEffect } from "react"
 

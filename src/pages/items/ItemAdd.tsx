@@ -1,7 +1,7 @@
-import TextField from "../components/fields/TextField"
-import BackButton from "../components/buttons/BackButton"
-import TextButton from "../components/buttons/TextButton"
-import useItems from "../hooks/useItems"
+import TextField from "../../components/fields/TextField"
+import BackButton from "../../components/buttons/BackButton"
+import TextButton from "../../components/buttons/TextButton"
+import useItems from "../../hooks/useItems"
 
 function ItemAdd() {
     const { addItem } = useItems()

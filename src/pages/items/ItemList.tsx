@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { RiAddLine, RiArrowDropDownFill } from "@remixicon/react"
 import { Link, useNavigate } from "react-router"
-import useItems from "../hooks/useItems"
-import IconButton from "../components/buttons/IconButton"
+import useItems from "../../hooks/useItems"
+import IconButton from "../../components/buttons/IconButton"
 
 function ItemList() {
     const navigate = useNavigate()
