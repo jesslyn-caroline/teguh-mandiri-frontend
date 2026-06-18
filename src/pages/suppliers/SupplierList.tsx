@@ -25,7 +25,7 @@ function SupplierList() {
     return (
     <div className={`w-full flex flex-col items-end gap-y-5 px-5 py-15`}>
         <div className={`w-full flex flex-row items-center gap-x-3`}>
-            <SearchInput placeholder='Cari Barang' value={search} onChange={onSearchChange} />
+            <SearchInput placeholder='Cari Supplier' value={search} onChange={onSearchChange} />
             <IconTextButton Icon={RiAddLine} title='Tambah Barang' text='Tambah' onClick={() => navigate('/supplier/tambah')} />
         </div>
         
