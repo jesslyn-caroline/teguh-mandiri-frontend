@@ -3,7 +3,7 @@ import { RiDeleteBinLine, RiEdit2Line } from "@remixicon/react"
 interface Props {
     type: string,
     title: string,
-    onClick: () => void,
+    onClick: (e?: any) => void,
 }
 
 const variants: any = {
