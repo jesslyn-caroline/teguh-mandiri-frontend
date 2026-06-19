@@ -24,7 +24,7 @@ function PurchaseOrderAdd() {
         { itemModal && <PopUp search='Barang' data={items} close={closeItemModal} searchId={purchaseOrder.items[itemFocusIdx].id} searchName={purchaseOrder.items[itemFocusIdx].name} onSearchIdChange={onPOItemIdChange} onSearchNameChange={onPOItemNameChange} onSelect={selectItem} /> }
 
         <BackButton redirectPath='/purchase-order' />  
-        <form id='supplier-add-form' 
+        <form id='purchase-order-add-form' 
             onSubmit={(e) => addPurchaseOrder(e)} 
             className={`w-full h-full flex flex-col gap-y-5 relative`}
         >
