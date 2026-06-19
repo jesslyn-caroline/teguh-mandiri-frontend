@@ -116,7 +116,7 @@ function useSuppliers() {
     }
 
     return { 
-        supplier, sortBy, sortType, filteredSuppliers, search, isAscending,
+        suppliers, supplier, sortBy, sortType, filteredSuppliers, search, isAscending,
         onSearchChange, onSupplierIdChange, onSupplierNameChange, onSupplierPhoneChange, onSupplierEmailChange, onSupplierAddressChange,
         getSuppliers, getSupplier, addSupplier, editSupplier, deleteSupplier 
     }
