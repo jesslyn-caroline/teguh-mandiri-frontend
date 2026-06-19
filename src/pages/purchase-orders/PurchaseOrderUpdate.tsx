@@ -30,7 +30,7 @@ function PurchaseOrderUpdate() {
         { itemModal && <PopUp search='Barang' data={items} close={closeItemModal} searchId={purchaseOrder.items[itemFocusIdx].id} searchName={purchaseOrder.items[itemFocusIdx].name} onSearchIdChange={onPOItemIdChange} onSearchNameChange={onPOItemNameChange} onSelect={selectItem} /> }
 
         <BackButton redirectPath='/purchase-order' />  
-        <form id='supplier-update-form' 
+        <form id='purchase-order-update-form' 
             onSubmit={(e) => updatePurchaseOrder(e)} 
             className={`w-full h-full flex flex-col gap-y-5 relative`}
         >
