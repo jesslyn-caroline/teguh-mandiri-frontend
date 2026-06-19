@@ -104,7 +104,7 @@ function useItems() {
     }
 
     return { 
-        filteredItems, search, isAscending, sortType, item,
+        items, filteredItems, search, isAscending, sortType, item,
         onItemIdChange, onItemNameChange, onItemStockChange,  onSearchChange, 
         getItems, getItem, addItem, editItem, deleteItem, sortBy 
     }
