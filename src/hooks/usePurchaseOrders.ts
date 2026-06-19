@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PurchaseOrderType } from "../types/PurchaseOrderType";
-import { addNewPurchaseOrder, deletePurchaseOrderById, getAllPurchaseOrders, getPurchaseOrderById, updatePurchaseOrderById } from "../apis/purchaseorders";
+import { addNewPurchaseOrder, deletePurchaseOrderById, getAllPurchaseOrders, getPurchaseOrderById, updatePurchaseOrderById } from "../apis/purchaseOrders";
 import { showToastError, showToastSuccess } from "../components/toasts/Toast";
 import { useNavigate } from "react-router";
 
