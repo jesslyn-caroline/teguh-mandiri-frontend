@@ -7,6 +7,9 @@ import ItemUpdate from "./pages/items/ItemUpdate"
 import SupplierList from "./pages/suppliers/SupplierList"
 import SupplierAdd from "./pages/suppliers/SupplierAdd"
 import SupplierUpdate from "./pages/suppliers/SupplierUpdate"
+import PurchaseOrderList from "./pages/purchase-orders/PurchaseOrderList"
+import PurchaseOrderAdd from "./pages/purchase-orders/PurchaseOrderAdd"
+import PurchaseOrderUpdate from "./pages/purchase-orders/PurchaseOrderUpdate"
 
 function App() {
   return (
@@ -17,7 +20,7 @@ function App() {
         <Route index element={<h1>Home</h1>} />
         <Route path='/barang' element={<ItemList />} />
         <Route path='/supplier' element={<SupplierList />} />
-        <Route path='/purchase-order' element={<h1>Purchase Order</h1>} />
+        <Route path='/purchase-order' element={<PurchaseOrderList />} />
         <Route path='/history-barang' element={<h1>History Barang</h1>} />
       </Route>
 
@@ -25,6 +28,8 @@ function App() {
       <Route path='/barang/edit/:id' element={<ItemUpdate />}/>
       <Route path='/supplier/tambah' element={<SupplierAdd />} />
       <Route path='/supplier/edit/:id' element={<SupplierUpdate />} />
+      <Route path='/purchase-order/tambah' element={<PurchaseOrderAdd />} />
+      <Route path='/purchase-order/edit/:id' element={<PurchaseOrderUpdate />} />
 
     </Routes>
     <_ToastContainer />
