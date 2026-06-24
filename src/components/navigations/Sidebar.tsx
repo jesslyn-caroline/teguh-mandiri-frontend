@@ -6,6 +6,7 @@ function Sidebar() {
     const menu = [
         { path: '/barang', name: 'Daftar Barang' },
         { path: '/supplier', name: 'Daftar Supplier' },
+        { path: '/customer', name: 'Daftar Customer' },
         { path: '/purchase-order', name: 'Purchase Order' },
         { path: '/penerimaan-barang', name: 'Penerimaan Barang' },
     ]
