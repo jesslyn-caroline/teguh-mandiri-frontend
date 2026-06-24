@@ -7,30 +7,65 @@ import { useNavigate } from "react-router";
 function useItems() {
     const navigate = useNavigate()
 
+    // States
     const [items, setItems] = useState<ItemType[]>([])
+    const [item, setItem] = useState<ItemType>({ id: '', name: '', stock: 0 })
 
     const [search, setSearch] = useState<string>('')
-    const [filteredItems, setFilteredItems] = useState<ItemType[]>([])
+    const [filtered, setFiltered] = useState<ItemType[]>([])
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
 
+
+    // Controllers
     const onSearchChange = (e:any) => {
         setSearch(e.target.value)
-        setFilteredItems(items.filter((item) => item.name.toLowerCase().includes(e.target.value.toLowerCase()) || item.id.toLowerCase().includes(e.target.value.toLowerCase())))
+        setFiltered(items.filter((item) => 
+            item.name.toLowerCase().includes(e.target.value.toLowerCase()) || 
+            item.id.toLowerCase().includes(e.target.value.toLowerCase()
+        )))
     }
 
-    const [item, setItem] = useState<ItemType>({ id: '', name: '', stock: 0 })
     const onItemIdChange = (e:any) => setItem({ ...item, id: e.target.value })
     const onItemNameChange = (e:any) => setItem({ ...item, name: e.target.value })
     const onItemStockChange = (e:any) => setItem({ ...item, stock: e.target.value })
-    
+   
+    // Functions
+    const sortBy = (type:string) => {
+        let tmp = items
+
+        switch (type) {
+            case 'id': 
+                if (isAscending) tmp = tmp.sort((a, b) => b.id.localeCompare(a.id))
+                else tmp = tmp.sort((a, b) => a.id.localeCompare(b.id))
+                setIsAscending(!isAscending)
+                setSortType(type)
+                break
+            case 'name':
+                if (isAscending) tmp = tmp.sort((a, b) => b.name.localeCompare(a.name))
+                else tmp = tmp.sort((a, b) => a.name.localeCompare(b.name))
+                setIsAscending(!isAscending)
+                setSortType(type)
+                break
+            case 'stock':
+                if (isAscending) tmp = tmp.sort((a, b) => b.stock - a.stock)
+                else tmp = tmp.sort((a, b) => a.stock - b.stock)
+                setIsAscending(!isAscending)
+                setSortType(type)
+                break
+        }
+
+        setFiltered(tmp)
+    }
+
+    // API
     async function getItems() {
         const response = await getAllItems()
         
         if (response.isError) showToastError(response.message)
         else {
             setItems(response.data)
-            setFilteredItems(response.data)
+            setFiltered(response.data)
         }
     }
 
@@ -49,7 +84,6 @@ function useItems() {
         if (response.isError) showToastError(response.message)
         else {
             showToastSuccess(response.message)
-            e.target.reset()
             navigate('/barang')
         }
     }
@@ -76,35 +110,8 @@ function useItems() {
         }
     }
 
-    function sortBy(type:string) {
-        let tmp = filteredItems
-
-        switch (type) {
-            case 'id': 
-                if (isAscending) tmp = tmp.sort((a, b) => b.id.localeCompare(a.id))
-                else tmp = tmp.sort((a, b) => a.id.localeCompare(b.id))
-                setIsAscending(!isAscending)
-                setSortType(type)
-                break
-            case 'name':
-                if (isAscending) tmp = tmp.sort((a, b) => b.name.localeCompare(a.name))
-                else tmp = tmp.sort((a, b) => a.name.localeCompare(b.name))
-                setIsAscending(!isAscending)
-                setSortType(type)
-                break
-            case 'stock':
-                if (isAscending) tmp = tmp.sort((a, b) => b.stock - a.stock)
-                else tmp = tmp.sort((a, b) => a.stock - b.stock)
-                setIsAscending(!isAscending)
-                setSortType(type)
-                break
-        }
-
-        setFilteredItems(tmp)
-    }
-
     return { 
-        items, filteredItems, search, isAscending, sortType, item,
+        items, item, filtered, search, isAscending, sortType, 
         onItemIdChange, onItemNameChange, onItemStockChange,  onSearchChange, 
         getItems, getItem, addItem, editItem, deleteItem, sortBy 
     }

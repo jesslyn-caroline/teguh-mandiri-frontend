@@ -6,8 +6,8 @@ import { useParams } from "react-router"
 import { useEffect } from "react"
 
 function ItemUpdate() {
-    const { item, onItemIdChange, onItemNameChange, onItemStockChange, editItem, getItem } = useItems()
     const { id } = useParams()
+    const { item, onItemIdChange, onItemNameChange, onItemStockChange, editItem, getItem } = useItems()
 
     useEffect(() => {
         getItem(id as string)
@@ -18,17 +18,16 @@ function ItemUpdate() {
         <BackButton redirectPath='/barang' />  
         <form id='item-edit-form' 
             onSubmit={(e) => editItem(e)} 
-            className={`w-full h-full flex flex-col gap-y-5`}
+            className={`w-full h-full flex flex-col gap-y-6`}
         >
             <h1 className={`text-lg font-bold`}>Edit Barang { item.id }</h1>
-            <div className={`grid grid-cols-[320px_1fr] gap-x-4`}>
-                <div className={`flex flex-col gap-y-4`}>
-                    <TextField title='Kode Barang' type='text' id='id' value={ item.id } onChange={onItemIdChange} />
-                    <TextField title='Stok' type='number' id='stock' value={ item.stock } onChange={onItemStockChange} />
-                </div>
-                <div>
+
+            <div className={`grid grid-cols-4 gap-y-4 gap-x-4`}>
+                <TextField title='Kode Barang' type='text' id='id' value={ item.id } onChange={onItemIdChange} disabled/>
+                <div className={`col-span-3`}>
                     <TextField title='Nama Barang' type='text' id='name' value={ item.name } onChange={onItemNameChange}/>
                 </div>
+                <TextField title='Stok' type='number' id='stock' value={ item.stock } onChange={onItemStockChange} />
             </div>
             <div className={`h-full flex justify-end items-end`}>
                 <TextButton text='Update' type='submit'/>

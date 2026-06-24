@@ -10,15 +10,19 @@ interface Props {
     isAscending?: boolean,
     sortType?: string,
     editPurchaseOrder?: (id: string) => void,
-    deletePurchaseOrder?: (id: string) => void
+    deletePurchaseOrder?: (id: string) => void,
+    needExpectedDeliveryDate?: boolean,
+    onRowSelect?: (purchaseOrder: PurchaseOrderType) => void,
+    needStatus?: boolean
 }
 
-function PurchaseOrderTable({purchaseOrders, action, sortBy, isAscending, sortType, editPurchaseOrder, deletePurchaseOrder}: Props) {
+function PurchaseOrderTable({purchaseOrders, action, sortBy, isAscending, sortType, editPurchaseOrder, deletePurchaseOrder, needExpectedDeliveryDate=true, onRowSelect, needStatus=true}: Props) {
     const columns = [
-        { key: 'id', title: 'Nomor PO' },
-        { key: 'supplier', title: 'Nama Supplier' },
-        { key: 'expectedDeliveryDate', title: 'Tanggal Pengiriman' },
-        { key: 'createdAt', title: 'Tanggal PO' },
+        { key: 'id', title: 'Nomor PO', isNeeded: true },
+        { key: 'supplier', title: 'Nama Supplier', isNeeded: true },
+        { key: 'expectedDeliveryDate', title: 'Tanggal Pengiriman', isNeeded: needExpectedDeliveryDate },
+        { key: 'createdAt', title: 'Tanggal PO', isNeeded: true },
+        { key: 'status', title: 'Status', isNeeded: needStatus },
     ]
 
     return (
@@ -26,6 +30,7 @@ function PurchaseOrderTable({purchaseOrders, action, sortBy, isAscending, sortTy
         <thead className={`bg-gray-50 border-b border-gray-300`}>
             <tr>
                 { columns.map((col) => {
+                    if (!col.isNeeded) return
                     return (
                     <th className={`px-6 py-3 font-bold text-gray-600 uppercase text-xs relative`}>
                         { sortBy ? 
@@ -38,20 +43,20 @@ function PurchaseOrderTable({purchaseOrders, action, sortBy, isAscending, sortTy
                         }
                     </th>
                 )})}
-                <th className={`px-6 py-3 font-bold text-gray-600 uppercase text-xs text-center`}>Aksi</th>
+                { action && <th className={`px-6 py-3 font-bold text-gray-600 uppercase text-xs text-center`}>Aksi</th> }
             </tr>
         </thead>
         <tbody className={`text-sm`}>
             { ...purchaseOrders.map((purchaseOrder) => {
                 const expectedDeliveryDate = ddMMYYYY(purchaseOrder.expectedDeliveryDate)
                 const createdAt = ddMMYYYY(purchaseOrder.createdAt)
-                return <tr className={`border-b border-gray-300`}>
-                    <th className={`px-6 py-4 font-semibold`}>{ purchaseOrder.id }</th>
-                    <td className={`px-6 py-4 text-gray-600 font-medium`}>{ purchaseOrder.supplier.name }</td>
-                    <td className={`px-6 py-4 text-gray-600 font-medium`}>{ expectedDeliveryDate }</td>
-                    <td className={`px-6 py-4 text-gray-600 font-medium`}>{ createdAt }</td>
+                return <tr className={`border-b border-gray-300 cursor-pointer hover:bg-gray-100`} onDoubleClick={() => editPurchaseOrder && editPurchaseOrder(purchaseOrder.id)}>
+                    <th onClick={() => onRowSelect && onRowSelect(purchaseOrder)} className={`px-6 py-4 font-semibold`}>{ purchaseOrder.id }</th>
+                    <td onClick={() => onRowSelect && onRowSelect(purchaseOrder)} className={`px-6 py-4 text-gray-600 font-medium`}>{ purchaseOrder.supplier.name }</td>
+                    { needExpectedDeliveryDate && <td className={`px-6 py-4 text-gray-600 font-medium`}>{ expectedDeliveryDate }</td> }
+                    <td onClick={() => onRowSelect && onRowSelect(purchaseOrder)} className={`px-6 py-4 text-gray-600 font-medium`}>{ createdAt }</td>
+                    { needStatus && <td onClick={() => onRowSelect && onRowSelect(purchaseOrder)} className={`px-6 py-4 text-gray-600 font-medium`}>{ purchaseOrder.isCompleted ? 'Selesai' : 'Belum Selesai' }</td> }
                     { action && <td className={`px-6 py-4 flex flex-row gap-x-2 justify-center`}>
-                        { editPurchaseOrder && <IconButton type='edit' title='Edit' onClick={() => editPurchaseOrder(purchaseOrder.id)}/> }
                         { deletePurchaseOrder && <IconButton type='delete' title='Hapus' onClick={() => deletePurchaseOrder(purchaseOrder.id)}/> }
                     </td> }
                 </tr>

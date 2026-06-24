@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { PurchaseOrderType } from "../types/PurchaseOrderType";
+import { useRef, useState } from "react";
+import { purchaseOrderDefaultValue, type PurchaseOrderType } from "../types/PurchaseOrderType";
 import { addNewPurchaseOrder, deletePurchaseOrderById, getAllPurchaseOrders, getPurchaseOrderById, updatePurchaseOrderById } from "../apis/purchaseOrders";
 import { showToastError, showToastSuccess } from "../components/toasts/Toast";
 import { useNavigate } from "react-router";
@@ -7,21 +7,71 @@ import { useNavigate } from "react-router";
 function usePurchaseOrders() {
     const navigate = useNavigate()
 
-    const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderType[]>([])
-    const [purchaseOrder, setPurchaseOrder] = useState<PurchaseOrderType>({ id: '', supplier: { id: '', name: '' }, expectedDeliveryDate: new Date(), createdAt: new Date(), items: [{ id: '', name: '', quantity: 0, received: 0 }] })
+    // States
+    const [orders, setOrders] = useState<PurchaseOrderType[]>([])
+    const [order, setOrder] = useState<PurchaseOrderType>(purchaseOrderDefaultValue)
 
     const [search, setSearch] = useState<string>('')
-    const [filteredPOs, setFilteredPOs] = useState<PurchaseOrderType[]>([])
+    const [filtered, setFiltered] = useState<PurchaseOrderType[]>([])
     const [isAscending, setIsAscending] = useState<boolean>(true)
     const [sortType, setSortType] = useState<string>('id')
 
+    const [supplierModal, setSupplierModal] = useState<boolean>(false)
+    const [itemModal, setItemModal] = useState<boolean>(false)
+
+    const itemFocusIdx = useRef(0)
+
+    // Controllers
+    const onFocusItem = (idx: number) => itemFocusIdx.current = idx
+
     const onSearchChange = (e:any) => {
         setSearch(e.target.value)
-        setFilteredPOs(purchaseOrders.filter((purchaseOrder) => purchaseOrder.id.toLowerCase().includes(e.target.value.toLowerCase()) || purchaseOrder.supplier.name.toLowerCase().includes(e.target.value.toLowerCase())))
+        setFiltered(orders.filter((order) => 
+            order.id.toLowerCase().includes(e.target.value.toLowerCase()) || 
+            order.supplier.name.toLowerCase().includes(e.target.value.toLowerCase()
+        )))
     }
 
-    function sortBy(type: string) {
-        let tmp = purchaseOrders
+    const onIdChange = (e:any) => setOrder({ ...order, id: e.target.value })
+    const onSupplierIdChange = (e:any) => {
+        setSupplierModal(true)
+        setOrder({ ...order, supplier: { ...order.supplier, id: e.target.value } })
+    }
+    const onSupplierNameChange = (e: any) => {
+        setSupplierModal(true)
+        setOrder({ ...order, supplier: { ...order.supplier, name: e.target.value } })
+    }
+    const onExpectedDeliveryDateChange = (e:any) => setOrder({ ...order, expectedDeliveryDate: new Date(e.target.value) })
+    const onCreatedAtChange = (e:any) => setOrder({ ...order, createdAt: new Date(e.target.value) })
+    const onItemIdChange = (e:any) => {
+        let items = order.items
+        items[itemFocusIdx.current].id = e.target.value
+        setItemModal(true)
+        setOrder({ ...order, items })
+    }
+    const onItemNameChange = (e:any) => {
+        let items = order.items
+        items[itemFocusIdx.current].name = e.target.value
+        setItemModal(true)
+        setOrder({ ...order, items })
+    }
+    const onItemQuantityChange = (e:any) => {
+        let items = order.items
+        items[itemFocusIdx.current].quantity = e.target.value
+        setOrder({ ...order, items })
+    }
+
+    // Functions
+    const closeSupplierModal = () => setSupplierModal(false)
+    const closeItemModal = () => setItemModal(false)
+
+    const selectSupplier = (id: string, name: string) => {
+        setOrder({ ...order, supplier: { id, name } })
+        closeSupplierModal()
+    }
+
+    const sortBy = (type: string) => {
+        let tmp = orders
 
         switch (type) {
             case 'id':
@@ -49,111 +99,52 @@ function usePurchaseOrders() {
                 setSortType(type)
                 break
         }
+
+        setFiltered(tmp)
     }
 
-    const [supplierModal, setSupplierModal] = useState<boolean>(false)
-    const [itemModal, setItemModal] = useState<boolean>(false)
-
-    const closeSupplierModal = () => setSupplierModal(false)
-    const closeItemModal = () => setItemModal(false)
-
-    const [itemFocusIdx, setItemFocusIdx] = useState<number>(0)
-    const onFocusItem = (idx: number) => setItemFocusIdx(idx)
-
-    const onPOIdChange = (e:any) => setPurchaseOrder({ ...purchaseOrder, id: e.target.value })
-    const onPOSupplierIdChange = (e:any) => {
-        setSupplierModal(true)
-        setPurchaseOrder({ ...purchaseOrder, supplier: { ...purchaseOrder.supplier, id: e.target.value } })
-    }
-    const onPOSupplierNameChange = (e: any) => {
-        setSupplierModal(true)
-        setPurchaseOrder({ ...purchaseOrder, supplier: { ...purchaseOrder.supplier, name: e.target.value } })
-    }
-    const selectSupplier = (id: string, name: string) => {
-        setPurchaseOrder({ ...purchaseOrder, supplier: { id, name } })
-        closeSupplierModal()
-    }
-    const onPOExpectedDeliveryDateChange = (e:any) => setPurchaseOrder({ ...purchaseOrder, expectedDeliveryDate: new Date(e.target.value) })
-    const onPOCreatedAtChange = (e:any) => setPurchaseOrder({ ...purchaseOrder, createdAt: new Date(e.target.value) })
-    const onPOItemIdChange = (e:any) => {
-        setItemModal(true)
-        setPurchaseOrder({ ...purchaseOrder, 
-            items: [
-                ...purchaseOrder.items.map((item, i) => {
-                    if (i === itemFocusIdx) return { ...item, id: e.target.value }
-                    else return item
-                })
-            ] 
-        })
-    }
-    const onPOItemNameChange = (e:any) => {
-        setItemModal(true)
-        setPurchaseOrder({ ...purchaseOrder, 
-            items: [
-                ...purchaseOrder.items.map((item, i) => {
-                    if (i === itemFocusIdx) return { ...item, name: e.target.value }
-                    else return item
-                })
-            ] 
-        })
-    }
-    const onPOItemQuantityChange = (e:any, idx?: number) => {
-        if (idx) setItemFocusIdx(idx)
-        idx = idx ? idx : itemFocusIdx
-        setPurchaseOrder({ 
-            ...purchaseOrder, items: [
-                ...purchaseOrder.items.map((item, i) => {
-                    if (i === idx) return { ...item, quantity: e.target.value }
-                    else return item
-                })
-            ] 
-        })
-    }
-
-    const deletePOItem = (idx: number, e: any) => {
+    const deleteItemFromList = (e: any, idx: number) => {
         e.preventDefault()
-        if (purchaseOrder.items.length === 1) return
-        setPurchaseOrder({ 
-            ...purchaseOrder, items: [
-                ...purchaseOrder.items.filter((_, i) => i !== idx)
-            ] 
-        })
+
+        let items = order.items
+        items = items.filter((_, i) => i !== idx)
+
+        if (order.items.length === 1) items = [{ id: '', name: '', quantity: 0, received: 0 }]
+        setOrder({ ...order, items })
     }
 
     const selectItem = (id: string, name: string) => {
-        setPurchaseOrder({ 
-            ...purchaseOrder, items: [
-                ...purchaseOrder.items.map((item, i) => {
-                    if (i === itemFocusIdx) return { ...item, id, name }
-                    else return item
-                }),
-                { id: '', name: '', quantity: 0, received: 0 }
-            ] 
-        })
+        let items = order.items
+        items[itemFocusIdx.current] = { ...items[itemFocusIdx.current], id, name }
+        items = [...items, { id: '', name: '', quantity: 0, received: 0 }]
+        setOrder({ ...order, items })
         closeItemModal()
     }
 
-    async function getPurchaseOrders() {
-        const response = await getAllPurchaseOrders()
+    const addNewRow = () => setOrder({ ...order, items: [...order.items, { id: '', name: '', quantity: 0, received: 0 }] })
 
+    // API
+    async function getOrders(isCompleted?: boolean) {
+        const response = await getAllPurchaseOrders(isCompleted)
+        
         if (response.isError) showToastError(response.message)
         else {
-            setPurchaseOrders(response.data)
-            setFilteredPOs(response.data)
+            setOrders(response.data)
+            setFiltered(response.data)
         }
     }
 
-    async function getPurchaseOrder(id: string) {
+    async function getOrder(id: string) {
         const response = await getPurchaseOrderById(id)
 
         if (response.isError) showToastError(response.message)
-        else setPurchaseOrder(response.data)
+        else setOrder(response.data)
     }
 
-    async function addPurchaseOrder(e: any) {
+    async function addOrder(e: any) {
         e.preventDefault()
 
-        let purchaseOrderCopy = { ...purchaseOrder }
+        let purchaseOrderCopy = { ...order }
         if (purchaseOrderCopy.items.at(-1)?.id === '') purchaseOrderCopy.items.pop()
     
         const response = await addNewPurchaseOrder(purchaseOrderCopy)
@@ -161,15 +152,14 @@ function usePurchaseOrders() {
         if (response.isError) showToastError(response.message)
         else {
             showToastSuccess(response.message)
-            e.target.reset()
             navigate('/purchase-order')
         }
     }
 
-    async function updatePurchaseOrder(e: any) {
+    async function updateOrder(e: any) {
         e.preventDefault()
 
-        const response = await updatePurchaseOrderById(purchaseOrder)
+        const response = await updatePurchaseOrderById(order)
 
         if (response.isError) showToastError(response.message)
         else {
@@ -178,21 +168,21 @@ function usePurchaseOrders() {
         }
     }
 
-    async function deletePurchaseOrder(id: string) {
+    async function deleteOrder(id: string) {
         const response = await deletePurchaseOrderById(id)
 
         if (response.isError) showToastError(response.message)
         else {
-            getPurchaseOrders()
             showToastSuccess(response.message)
+            getOrders()
         }
     }
 
     return { 
-        filteredPOs, search, isAscending, sortType, itemFocusIdx, purchaseOrder, supplierModal, itemModal, sortBy, onSearchChange,
-        closeSupplierModal, closeItemModal, selectSupplier, selectItem, deletePOItem, onFocusItem,
-        onPOIdChange, onPOSupplierIdChange, onPOSupplierNameChange, onPOExpectedDeliveryDateChange, onPOCreatedAtChange, onPOItemIdChange, onPOItemNameChange, onPOItemQuantityChange, 
-        getPurchaseOrders, addPurchaseOrder, deletePurchaseOrder, getPurchaseOrder, updatePurchaseOrder
+        filtered, search, isAscending, sortType, itemFocusIdx, order, supplierModal, itemModal, 
+        onFocusItem, onSearchChange, onIdChange, onSupplierIdChange, onSupplierNameChange, onExpectedDeliveryDateChange, onCreatedAtChange, onItemIdChange, onItemNameChange, onItemQuantityChange, 
+        sortBy, closeSupplierModal, closeItemModal, selectSupplier, selectItem, deleteItemFromList, addNewRow,      
+        getOrders, addOrder, deleteOrder, getOrder, updateOrder
     }
 }
 

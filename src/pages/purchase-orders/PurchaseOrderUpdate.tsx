@@ -13,7 +13,12 @@ function PurchaseOrderUpdate() {
     const { id } = useParams()
     const { items, getItems } = useItems()
     const { suppliers, getSuppliers } = useSuppliers()
-    const { updatePurchaseOrder, getPurchaseOrder, onFocusItem, deletePOItem, onPOItemQuantityChange, selectItem, onPOItemIdChange, onPOItemNameChange, itemFocusIdx, purchaseOrder, supplierModal, itemModal, closeSupplierModal, closeItemModal, onPOIdChange, onPOCreatedAtChange, onPOExpectedDeliveryDateChange, onPOSupplierIdChange, onPOSupplierNameChange, selectSupplier } = usePurchaseOrders()
+    const { 
+        order, itemFocusIdx, supplierModal, itemModal,
+        onFocusItem, onItemQuantityChange, onItemIdChange, onItemNameChange, onIdChange, onCreatedAtChange, onExpectedDeliveryDateChange, onSupplierIdChange, onSupplierNameChange,
+        addNewRow,  deleteItemFromList,  selectItem, closeSupplierModal, closeItemModal, selectSupplier,
+        updateOrder, getOrder, 
+    } = usePurchaseOrders()
 
     useEffect(() => {
         getItems()
@@ -21,17 +26,17 @@ function PurchaseOrderUpdate() {
     }, [])
 
     useEffect(() => {
-        getPurchaseOrder(id as string)
+        getOrder(id as string)
     }, [ id ])
 
-    return ( purchaseOrder &&
+    return ( order &&
     <div className={`max-w-480 w-screen min-h-screen h-full flex flex-col gap-y-4 px-16 py-10 relative`}>
-        { supplierModal && <PopUp search='Supplier' data={suppliers} close={closeSupplierModal} searchId={purchaseOrder.supplier.id} searchName={purchaseOrder.supplier.name} onSearchIdChange={onPOSupplierIdChange} onSearchNameChange={onPOSupplierNameChange} onSelect={selectSupplier} /> }
-        { itemModal && <PopUp search='Barang' data={items} close={closeItemModal} searchId={purchaseOrder.items[itemFocusIdx].id} searchName={purchaseOrder.items[itemFocusIdx].name} onSearchIdChange={onPOItemIdChange} onSearchNameChange={onPOItemNameChange} onSelect={selectItem} /> }
+        { supplierModal && <PopUp search='Supplier' data={suppliers} close={closeSupplierModal} searchId={order.supplier.id} searchName={order.supplier.name} onSearchIdChange={onSupplierIdChange} onSearchNameChange={onSupplierNameChange} onSelect={selectSupplier} /> }
+        { itemModal && <PopUp search='Barang' data={items} close={closeItemModal} searchId={order.items[itemFocusIdx.current].id} searchName={order.items[itemFocusIdx.current].name} onSearchIdChange={onItemIdChange} onSearchNameChange={onItemNameChange} onSelect={selectItem} /> }
 
         <BackButton redirectPath='/purchase-order' />  
         <form id='purchase-order-update-form' 
-            onSubmit={(e) => updatePurchaseOrder(e)} 
+            onSubmit={(e) => updateOrder(e)} 
             className={`w-full h-full flex flex-col gap-y-5 relative`}
         >
             <div className={`absolute -top-5 right-0`}>
@@ -39,24 +44,26 @@ function PurchaseOrderUpdate() {
             </div>
             <h1 className={`text-lg font-bold`}>Edit Purchase Order { id }</h1>
             <div className={`grid grid-cols-4 gap-x-4 gap-y-4`}>
-                <TextField title='Kode PO' type='text' id='id' value={purchaseOrder.id} onChange={onPOIdChange}/>
-                <TextField title='Tanggal PO' type='date' id='createdAt' value={purchaseOrder.createdAt.toISOString().split('T')[0]} onChange={onPOCreatedAtChange}/> 
-                <TextField title='Tanggal Pengiriman' type='date' id='expectedDeliveryDate' value={purchaseOrder.expectedDeliveryDate.toISOString().split('T')[0]} onChange={onPOExpectedDeliveryDateChange} /> 
+                <TextField title='Kode PO' type='text' id='id' value={order.id} onChange={onIdChange}/>
+                <TextField title='Tanggal PO' type='date' id='createdAt' value={order.createdAt.toISOString().split('T')[0]} onChange={onCreatedAtChange}/> 
+                <TextField title='Tanggal Pengiriman' type='date' id='expectedDeliveryDate' value={order.expectedDeliveryDate.toISOString().split('T')[0]} onChange={onExpectedDeliveryDateChange} /> 
                 <div className={`col-span-1`} />
-                <TextField title='Kode Supplier' type='text' id='id' onChange={onPOSupplierIdChange} value={purchaseOrder.supplier.id}/>
+                <TextField title='Kode Supplier' type='text' id='id' onChange={onSupplierIdChange} value={order.supplier.id}/>
                 <div className={`col-span-3`}>
-                    <TextField title='Nama Supplier' type='text' id='name' onChange={onPOSupplierNameChange} value={purchaseOrder.supplier.name}/>
+                    <TextField title='Nama Supplier' type='text' id='name' onChange={onSupplierNameChange} value={order.supplier.name}/>
                 </div>
             </div>
 
             <div className={`w-full shadow-xs border border-gray-300 rounded-md`}>
                 <InputItemTable
-                    items={purchaseOrder.items}
-                    deleteItem={deletePOItem}
-                    onItemQuantityChange={onPOItemQuantityChange}
-                    onItemIdChange={onPOItemIdChange}
-                    onItemNameChange={onPOItemNameChange}
+                    items={order.items}
+                    deleteItem={deleteItemFromList}
+                    onItemQuantityChange={onItemQuantityChange}
+                    onItemIdChange={onItemIdChange}
+                    onItemNameChange={onItemNameChange}
                     onFocus={onFocusItem}
+                    purchaseOrderEdit
+                    addNewRow={addNewRow}
                 />
             </div>
         </form>

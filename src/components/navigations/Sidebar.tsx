@@ -7,7 +7,7 @@ function Sidebar() {
         { path: '/barang', name: 'Daftar Barang' },
         { path: '/supplier', name: 'Daftar Supplier' },
         { path: '/purchase-order', name: 'Purchase Order' },
-        { path: '/history-barang', name: 'History Barang' },
+        { path: '/penerimaan-barang', name: 'Penerimaan Barang' },
     ]
 
     return (

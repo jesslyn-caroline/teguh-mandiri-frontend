@@ -8,10 +8,15 @@ import PurchaseOrderTable from "../../components/tables/PurchaseOrderTable"
 
 function PurchaseOrderList() {
     const navigate = useNavigate()
-    const { filteredPOs, search, onSearchChange, sortBy, sortType, isAscending, getPurchaseOrders, deletePurchaseOrder } = usePurchaseOrders()
+    const { 
+        filtered, search, sortType, isAscending,
+        onSearchChange, 
+        sortBy,
+        getOrders, deleteOrder 
+    } = usePurchaseOrders()
 
     useEffect(() => {
-        getPurchaseOrders()
+        getOrders()
     }, [])
 
     return (
@@ -23,12 +28,12 @@ function PurchaseOrderList() {
         
         <div className={`w-full overflow-x-auto shadow-xs border border-gray-300 rounded-md`}>
             <PurchaseOrderTable 
-                purchaseOrders={filteredPOs}
+                purchaseOrders={filtered}
                 sortBy={sortBy}
                 isAscending={isAscending}
                 sortType={sortType}
                 editPurchaseOrder={(id) => navigate(`/purchase-order/edit/${id}`)}
-                deletePurchaseOrder={deletePurchaseOrder}
+                deletePurchaseOrder={deleteOrder}
                 action={true}
             />
         </div>

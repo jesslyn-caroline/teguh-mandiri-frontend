@@ -30,7 +30,7 @@ function PopUp({ search, data, close, searchId, searchName, onSearchIdChange, on
                 {
                     search === 'Supplier' ?
                     <SupplierTable
-                        suppliers={data.filter((value) => value.id.includes(searchId) && value.name.includes(searchName)) as SupplierType[]} 
+                        suppliers={data.filter((value) => value.id.toLowerCase().includes(searchId.toLowerCase()) && value.name.toLowerCase().includes(searchName.toLowerCase())) as SupplierType[]} 
                         action={false}
                         needAddress={false}
                         needEmail={false}
@@ -38,8 +38,7 @@ function PopUp({ search, data, close, searchId, searchName, onSearchIdChange, on
                         onRowSelect={onSelect}
                     /> : 
                     <ItemTable 
-                        items={data.filter((value) => value.id.includes(searchId) && value.name.includes(searchName)) as ItemType[]} 
-                        action={false}
+                        items={data.filter((value) => value.id.toLowerCase().includes(searchId.toLowerCase()) && value.name.toLowerCase().includes(searchName.toLowerCase())) as ItemType[]} 
                         onRowSelect={onSelect}
                     />
                 }

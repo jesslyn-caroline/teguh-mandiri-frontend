@@ -11,17 +11,15 @@ function ItemAdd() {
         <BackButton redirectPath='/barang' />  
         <form id='item-add-form' 
             onSubmit={(e) => addItem(e)} 
-            className={`w-full h-full flex flex-col gap-y-5`}
+            className={`w-full h-full flex flex-col gap-y-6`}
         >
             <h1 className={`text-lg font-bold`}>Tambah Barang Baru</h1>
-            <div className={`grid grid-cols-[320px_1fr] gap-x-4`}>
-                <div className={`flex flex-col gap-y-4`}>
-                    <TextField title='Kode Barang' type='text' id='id' onChange={onItemIdChange}/>
-                    <TextField title='Stok' type='number' id='stock' onChange={onItemStockChange}/>
-                </div>
-                <div>
+            <div className={`grid grid-cols-4 gap-y-4 gap-x-4`}>
+                <TextField title='Kode Barang' type='text' id='id' onChange={onItemIdChange}/>
+                <div className={`col-span-3`}>
                     <TextField title='Nama Barang' type='text' id='name' onChange={onItemNameChange}/>
                 </div>
+                <TextField title='Stok' type='number' id='stock' onChange={onItemStockChange}/>
             </div>
             <div className={`h-full flex justify-end items-end`}>
                 <TextButton text='Tambah' type='submit'/>

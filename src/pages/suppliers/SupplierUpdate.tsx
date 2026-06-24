@@ -6,8 +6,13 @@ import { useEffect } from "react"
 import useSuppliers from "../../hooks/useSuppliers"
 
 function SupplierUpdate() {
-    const { supplier, onSupplierIdChange, onSupplierNameChange, onSupplierEmailChange, onSupplierPhoneChange, onSupplierAddressChange, editSupplier, getSupplier } = useSuppliers()
     const { id } = useParams()
+
+    const { 
+        supplier, 
+        onSupplierIdChange, onSupplierNameChange, onSupplierEmailChange, onSupplierPhoneChange, onSupplierAddressChange, 
+        editSupplier, getSupplier 
+    } = useSuppliers()
 
     useEffect(() => {
         getSupplier(id as string)

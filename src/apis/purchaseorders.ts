@@ -2,7 +2,7 @@ import axios from "axios"
 import type { PurchaseOrderType } from "../types/PurchaseOrderType"
 import { api } from "."
 
-async function getAllPurchaseOrders():
+async function getAllPurchaseOrders(isCompleted?: boolean):
     Promise<{ message:string, data:PurchaseOrderType[], isError:boolean }> {
     
     let message: string = ''
@@ -10,7 +10,7 @@ async function getAllPurchaseOrders():
     let isError: boolean = false
 
     try {
-        const response = await axios.get(`${api}/procurement/purchase-orders`)
+        const response = await axios.get(`${api}/procurement/purchase-orders${isCompleted !== undefined ? `?isCompleted=${isCompleted}` : ''}`)
         message = response.data.message
         data = response.data.data
     } catch (error: any) {

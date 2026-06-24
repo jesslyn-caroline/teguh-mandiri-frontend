@@ -16,7 +16,7 @@ interface Props {
     onRowSelect?: (id: string, name: string) => void
 }
 
-function SupplierTable ({suppliers, action, sortBy, isAscending, sortType, editSupplier, deleteSupplier, needPhone, needEmail, needAddress=true, onRowSelect}: Props) {
+function SupplierTable ({suppliers, action, sortBy, isAscending, sortType, editSupplier, deleteSupplier, needPhone=true, needEmail, needAddress=true, onRowSelect}: Props) {
     const columns = [
         { key: 'id', title: 'Kode Supplier', isNeeded: true },
         { key: 'name', title: 'Nama Supplier', isNeeded: true },
@@ -48,7 +48,7 @@ function SupplierTable ({suppliers, action, sortBy, isAscending, sortType, editS
         </thead>
         <tbody className={`text-sm`}>
             { ...suppliers.map((supplier) => (
-                <tr className={`border-b border-gray-300 cursor-pointer`} onClick={() => onRowSelect && onRowSelect(supplier.id, supplier.name)}>
+                <tr className={`border-b border-gray-300 cursor-pointer hover:bg-gray-100`} onClick={() => onRowSelect && onRowSelect(supplier.id, supplier.name)} onDoubleClick={() => editSupplier && editSupplier(supplier.id)}>
                     <th className={`px-6 py-4 font-semibold`}>{ supplier.id }</th>
                     <td className={`px-6 py-4 text-gray-600 font-medium`}>{ supplier.name }</td>
                     { needPhone && <td className={`px-6 py-4 text-gray-600 font-medium`}>{ supplier.phone }</td> }

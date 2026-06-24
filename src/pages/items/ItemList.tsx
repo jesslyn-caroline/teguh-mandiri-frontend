@@ -8,7 +8,12 @@ import ItemTable from "../../components/tables/ItemTable"
 
 function ItemList() {
     const navigate = useNavigate()
-    const { filteredItems, search, isAscending, sortType, onSearchChange, getItems, deleteItem, sortBy } = useItems()
+    const { 
+        filtered, search, isAscending, sortType, 
+        onSearchChange, 
+        sortBy,
+        getItems, deleteItem 
+    } = useItems()
 
     useEffect(() => {
         getItems()
@@ -23,7 +28,7 @@ function ItemList() {
         
         <div className={`w-full overflow-x-auto shadow-xs border border-gray-300 rounded-md`}>
             <ItemTable 
-                items={filteredItems}
+                items={filtered}
                 sortBy={sortBy}
                 isAscending={isAscending}
                 sortType={sortType}

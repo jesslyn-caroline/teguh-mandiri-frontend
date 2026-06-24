@@ -8,7 +8,12 @@ import SupplierTable from "../../components/tables/SupplierTable"
 
 function SupplierList() {
     const navigate = useNavigate()
-    const { sortBy, sortType, isAscending, filteredSuppliers, search, onSearchChange, getSuppliers, deleteSupplier } = useSuppliers()
+    const { 
+        sortType, isAscending, filteredSuppliers, search,
+        onSearchChange,
+        sortBy,   
+        getSuppliers, deleteSupplier 
+    } = useSuppliers()
 
     useEffect(() => {
         getSuppliers()

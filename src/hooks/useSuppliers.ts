@@ -7,27 +7,32 @@ import { useNavigate } from "react-router"
 function useSuppliers() {
     const navigate = useNavigate()
 
+    // States
     const [suppliers, setSuppliers] = useState<SupplierType[]>([])
-
-    const [sortType, setSortType] = useState<string>('')
-    const [isAscending, setIsAscending] = useState<boolean>(true)
+    const [supplier, setSupplier] = useState<SupplierType>({ id: '', name: '', phone: '', email: '', address: '' })
 
     const [search, setSearch] = useState<string>('')
     const [filteredSuppliers, setFilteredSuppliers] = useState<SupplierType[]>([])
+    const [sortType, setSortType] = useState<string>('')
+    const [isAscending, setIsAscending] = useState<boolean>(true)
 
+    // Controllers
     const onSearchChange = (e:any) => {
         setSearch(e.target.value)
-        setFilteredSuppliers(suppliers.filter((supplier) => supplier.name.toLowerCase().includes(e.target.value.toLowerCase()) || supplier.id.toLowerCase().includes(e.target.value.toLowerCase())))
+        setFilteredSuppliers(suppliers.filter((supplier) => 
+            supplier.name.toLowerCase().includes(e.target.value.toLowerCase()) || 
+            supplier.id.toLowerCase().includes(e.target.value.toLowerCase()
+        )))
     }
 
-    const [supplier, setSupplier] = useState<SupplierType>({ id: '', name: '', phone: '', email: '', address: '' })
     const onSupplierIdChange = (e:any) => setSupplier({ ...supplier, id: e.target.value })
     const onSupplierNameChange = (e:any) => setSupplier({ ...supplier, name: e.target.value })
     const onSupplierPhoneChange = (e:any) => setSupplier({ ...supplier, phone: e.target.value })
     const onSupplierEmailChange = (e:any) => setSupplier({ ...supplier, email: e.target.value })
     const onSupplierAddressChange = (e:any) => setSupplier({ ...supplier, address: e.target.value })
 
-    async function sortBy(type: string) {
+    // Functions
+    const sortBy = (type: string) => {
         let tmp = suppliers
 
         switch (type) {
@@ -66,6 +71,7 @@ function useSuppliers() {
         setSuppliers(tmp)
     }
 
+    // API
     async function getSuppliers() {
         const response = await getAllSuppliers()
         
@@ -112,7 +118,10 @@ function useSuppliers() {
         const response = await deleteSupplierById(id)
         
         if (response.isError) showToastError(response.message)
-        else getSuppliers()
+        else {
+            getSuppliers()
+            showToastSuccess(response.message)
+        }
     }
 
     return { 
