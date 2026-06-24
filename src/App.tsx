@@ -10,6 +10,9 @@ import SupplierUpdate from "./pages/suppliers/SupplierUpdate"
 import PurchaseOrderList from "./pages/purchase-orders/PurchaseOrderList"
 import PurchaseOrderAdd from "./pages/purchase-orders/PurchaseOrderAdd"
 import PurchaseOrderUpdate from "./pages/purchase-orders/PurchaseOrderUpdate"
+import ReceivedItemList from "./pages/receive-items/ReceivedItemList"
+import ReceivedItemAdd from "./pages/receive-items/ReceivedItemAdd"
+import ReceivedItemUpdate from "./pages/receive-items/ReceivedItemUpdate"
 
 function App() {
   return (
@@ -21,7 +24,7 @@ function App() {
         <Route path='/barang' element={<ItemList />} />
         <Route path='/supplier' element={<SupplierList />} />
         <Route path='/purchase-order' element={<PurchaseOrderList />} />
-        <Route path='/history-barang' element={<h1>History Barang</h1>} />
+        <Route path='/penerimaan-barang' element={<ReceivedItemList />} />
       </Route>
 
       <Route path='/barang/tambah' element={<ItemAdd />}/>
@@ -30,6 +33,8 @@ function App() {
       <Route path='/supplier/edit/:id' element={<SupplierUpdate />} />
       <Route path='/purchase-order/tambah' element={<PurchaseOrderAdd />} />
       <Route path='/purchase-order/edit/:id' element={<PurchaseOrderUpdate />} />
+      <Route path='/penerimaan-barang/tambah' element={<ReceivedItemAdd />} />
+      <Route path='/penerimaan-barang/edit/:id' element={<ReceivedItemUpdate />} />
 
     </Routes>
     <_ToastContainer />
